@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="vsaTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblTest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceivedDate" Type="datetime" Nullable="false" />
+          <Property Name="SentDate" Type="datetime" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClaimsAdministrator" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Request" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+          <Property Name="Employer" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Function Name="spDeleteData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spGetDataByDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReceiveDate" Type="datetime" Mode="In" />
+          <Parameter Name="SentDate" Type="datetime" Mode="In" />
+          <Parameter Name="DueDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="spInsertData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReceivedDate" Type="datetime" Mode="In" />
+          <Parameter Name="SentDate" Type="datetime" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="ClaimsAdministrator" Type="varchar" Mode="In" />
+          <Parameter Name="Employer" Type="varchar" Mode="In" />
+          <Parameter Name="Description" Type="varchar" Mode="In" />
+          <Parameter Name="Request" Type="varchar" Mode="In" />
+          <Parameter Name="DueDate" Type="datetime" Mode="In" />
+        </Function>
+        <EntityContainer Name="vsaTestModelStoreContainer">
+          <EntitySet Name="tblTest" EntityType="Self.tblTest" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="vsaTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblTest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceivedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SentDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClaimsAdministrator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Request" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Employer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="vsaTestEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblTests" EntityType="Self.tblTest" />
+          <FunctionImport Name="spDeleteData">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spInsertData">
+            <Parameter Name="ReceivedDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="ClaimsAdministrator" Mode="In" Type="String" />
+            <Parameter Name="Employer" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Request" Mode="In" Type="String" />
+            <Parameter Name="DueDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="spGetDataByDates" EntitySet="tblTests" ReturnType="Collection(vsaTestModel.tblTest)">
+            <Parameter Name="ReceiveDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DueDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="spGetDataByDates_Result">
+          <Property Type="String" Name="ReceivedDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SentDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ClaimsAdministrator" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Employer" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Request" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DueDate" Nullable="true" MaxLength="10" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="vsaTestModelStoreContainer" CdmEntityContainer="vsaTestEntities">
+          <EntitySetMapping Name="tblTests">
+            <EntityTypeMapping TypeName="vsaTestModel.tblTest">
+              <MappingFragment StoreEntitySet="tblTest">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ReceivedDate" ColumnName="ReceivedDate" />
+                <ScalarProperty Name="SentDate" ColumnName="SentDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ClaimsAdministrator" ColumnName="ClaimsAdministrator" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Request" ColumnName="Request" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Employer" ColumnName="Employer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="vsaTestModel.tblTest">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="vsaTestModel.Store.spInsertData">
+                  <ScalarProperty Name="DueDate" ParameterName="DueDate" />
+                  <ScalarProperty Name="Request" ParameterName="Request" />
+                  <ScalarProperty Name="Description" ParameterName="Description" />
+                  <ScalarProperty Name="Employer" ParameterName="Employer" />
+                  <ScalarProperty Name="ClaimsAdministrator" ParameterName="ClaimsAdministrator" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ScalarProperty Name="SentDate" ParameterName="SentDate" />
+                  <ScalarProperty Name="ReceivedDate" ParameterName="ReceivedDate" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="vsaTestModel.Store.spDeleteData">
+                  <ScalarProperty Name="Id" ParameterName="Id" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spDeleteData" FunctionName="vsaTestModel.Store.spDeleteData" />
+          <FunctionImportMapping FunctionImportName="spInsertData" FunctionName="vsaTestModel.Store.spInsertData" />
+          <FunctionImportMapping FunctionImportName="spGetDataByDates" FunctionName="vsaTestModel.Store.spGetDataByDates">
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

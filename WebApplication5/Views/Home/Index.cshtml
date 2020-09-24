@@ -1,0 +1,286 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery-ui.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#txtRD").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+        $("#txtSD").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+        $("#txtDD").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+        $("#txtRDA").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+        $("#txtSDA").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+        $("#txtDDA").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: 0
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnSave").click(function () {
+
+            var objDD = new Object();
+            objDD.ReceivedDate = $("#txtRDA").val();
+            objDD.SentDate = $("#txtSDA").val();
+            objDD.Name = $("#txtName").val();
+            objDD.ClaimsAdministrator = $("#txtCA").val();
+            objDD.Description = $("#txtDesc").val();
+            objDD.Request = $("#txtReq").val();
+            objDD.DueDate = $("#txtDDA").val();
+            objDD.Employer = $("#txtEmp").val();
+
+            //alert("in");
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("InsertData","Home")',
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                data: "{objDD:" + JSON.stringify(objDD) + "}",
+                success: function (data) {
+                    if (data.Result == "success") {
+                        //alert("in2");
+                        alert("Data is inserted successfully.")
+                        $("#txtRDA").val("");
+                        $("#txtSDA").val("");
+                        $("#txtDDA").val("");
+                        $("#txtName").val("");
+                        $("#txtCA").val("");
+                        $("#txtDesc").val("");
+                        $("#txtReq").val("");
+                        $("#txtEmp").val("");
+
+                        window.location.reload();
+                    }
+                    else if (data.Result == "error") {
+                        //alert("in3");
+                        alert("There is error while saving information.")
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            })
+        })
+
+        $("#btnCancel").click(function () {
+            $("#txtRDA").val("");
+            $("#txtSDA").val("");
+            $("#txtDDA").val("");
+            $("#txtName").val("");
+            $("#txtCA").val("");
+            $("#txtDesc").val("");
+            $("#txtReq").val("");
+            $("#txtEmp").val("");
+        })
+
+        $("#btnGetData").click(function () {
+
+            var tblHtml = "";
+
+            var getData = new Object();
+
+            getData.ReceiveDate = $("#txtRD").val();
+            getData.SentDate = $("#txtSD").val();
+            getData.DueDate = $("#txtDD").val();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("getDataByDates", "Home")',
+                data: "{objGD:" + JSON.stringify(getData) + "}",
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    $("#tblData").empty();
+
+                    tblHtml = tblHtml + "<table id='tblData'><thead><tr><th>ReceivedDate</th>";
+                    tblHtml = tblHtml + "<th>SentDate</th>";
+                    tblHtml = tblHtml + "<th>Name</th>";
+                    tblHtml = tblHtml + "<th>Claims Administrator</th>";
+                    tblHtml = tblHtml + "<th>Description</th>";
+                    tblHtml = tblHtml + "<th>Request</th>";
+                    tblHtml = tblHtml + "<th>DueDate</th>";
+                    tblHtml = tblHtml + "<th>Employer</th></tr></thead>";
+
+                    $.each(data, function (index, finalData) {
+                        tblHtml = tblHtml + "<tbody><tr><td>" + finalData.ReceivedDate + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.SentDate + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.Name + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.ClaimsAdministrator + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.Description + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.Request + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.DueDate + "</td>";
+                        tblHtml = tblHtml + "<td>" + finalData.Employer + "</td></tr></tbody>";
+                    })
+                    $("#tblData").html(tblHtml);
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            })
+        })
+
+        $(document).on("click", ".delete", function () {
+
+            var idDelete = $(this).attr("id");
+            var arId = new Array();
+            arId = idDelete.split('_');
+            var Id = arId[1];
+
+            var isConfirm = confirm("Are you sure you want to delete?");
+
+            if (isConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteData", "Home")',
+                    data: "{Id:" + JSON.stringify(Id) + "}",
+                    dataType: "json",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        if (data.Result == "success") {
+                            alert("Data is deleted successfully.")
+                            window.location.reload();
+                        }
+                        else if (data.Result == "error") {
+                            alert("There is error while deleting information.")
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+
+
+<table>
+    <tr>
+        <td>
+            <input type="text" disabled="disabled" maxlength="10" id="txtRD" />
+        </td>
+        <td>
+            <input type="text" disabled="disabled" maxlength="10" id="txtSD" />
+        </td>
+        <td>
+            <input type="text" disabled="disabled" maxlength="10" id="txtDD" />
+        </td>
+        <td>
+            <input type="button" id="btnGetData" value="GetData" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+    <tr>
+        <td>
+            <input type="text" disabled="disabled" maxlength="10" id="txtRDA" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" disabled="disabled" maxlength="10" id="txtSDA" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" disabled="disabled" maxlength="10" id="txtDDA" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" maxlength="50" id="txtName" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" maxlength="50" id="txtCA" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" maxlength="50" id="txtDesc" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" maxlength="50" id="txtReq" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" maxlength="50" id="txtEmp" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" id="btnSave" value="Save" />
+            <input type="button" id="btnCancel" value="Cancel" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @if (TempData["data"] != null)
+            {
+                IEnumerable<WebApplication5.Data.tblTest> pr = (IEnumerable<WebApplication5.Data.tblTest>)TempData["data"];
+
+                if (pr.Count() != 0)
+                {
+                    <table id="tblData">
+                        <thead>
+                            <tr>
+                                <th>Receive Date</th>
+                                <th>Sent Date</th>
+                                <th>Due Date</th>
+                                <th>Name</th>
+                                <th>Claims Administrator</th>
+                                <th>Description</th>
+                                <th>Request</th>
+                                <th>Employer</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        @foreach (var data in pr)
+                        {
+                            <tr>
+                                <td class="seearch">@data.ReceivedDate.ToString("dd/MM/yyyy")</td>
+                                <td>@data.SentDate.ToString("dd/MM/yyyy") </td>
+                                <td>@data.DueDate.ToString("dd/MM/yyyy")</td>
+                                <td>@data.Name</td>
+                                <td>@data.ClaimsAdministrator</td>
+                                <td>@data.Description</td>
+                                <td>@data.Request</td>
+                                <td>@data.Employer</td>
+                                <td>
+                                    <a style="cursor:pointer;" class="delete" id="Delete_@data.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            }
+        </td>
+    </tr>
+</table>
